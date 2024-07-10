@@ -1,0 +1,7 @@
+.terraform
+.terraform.lock.hcl
+
+HAWA-key
+HAWA-key.pub
+
+terraform.tfvars
