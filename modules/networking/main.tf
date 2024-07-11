@@ -8,31 +8,6 @@ data "aws_internet_gateway" "igw" {
   }
 }
 
-locals {
-  priv_cidr_index_fix = {
-    0 = "200"
-    1 = "201"
-    2 = "202"
-    3 = "203"
-    4 = "204"
-    5 = "205"
-    6 = "206"
-    7 = "207"
-    8 = "208"
-  }
-    pub_cidr_index_fix = {
-    0 = "100"
-    1 = "101"
-    2 = "102"
-    3 = "103"
-    4 = "104"
-    5 = "105"
-    6 = "106"
-    7 = "107"
-    8 = "108"
-  }
-}
-
 resource "aws_subnet" "priv_subnet" {
   count                = var.priv_subnet_count
   cidr_block           = "172.31.${local.priv_cidr_index_fix[count.index]}.0/24"

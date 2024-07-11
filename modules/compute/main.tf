@@ -1,7 +1,7 @@
 resource "aws_instance" "golden_image" {
   instance_type   = "t2.micro"
   ami = "ami-06c68f701d8090592"
-  user_data       = templatefile(var.user_data_path, {text = "HEllowerwer"})
+  user_data       = file(var.user_data_path)
   key_name        = aws_key_pair.key_pair.key_name
   security_groups = var.instance_security_groups
   subnet_id       = var.priv_subnet_ids[0]
@@ -38,10 +38,15 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id   = var.vpc_id
 }
 
-resource "aws_lb_target_group_attachment" "lb-first" {
-  target_group_arn = aws_lb_target_group.target_group.arn
-  target_id        = aws_instance.golden_image.id
-  port             = 80
+resource "aws_lb_listener" "http_lb_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group.arn
+  }
 }
 
 resource "aws_launch_template" "lt" {
@@ -49,6 +54,15 @@ resource "aws_launch_template" "lt" {
   image_id      = aws_ami_from_instance.golden_ami.id
   key_name      = aws_key_pair.key_pair.key_name
   instance_type = "t2.micro"
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = "${terraform.workspace}-server-from-LT"
+    }
+  }
+
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -64,5 +78,12 @@ resource "aws_autoscaling_group" "asg" {
   launch_template {
     id = aws_launch_template.lt.id
   }
+    lifecycle {
+    ignore_changes = [load_balancers, target_group_arns]
+  }
 }
 
+resource "aws_autoscaling_attachment" "application_asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.asg.id
+  lb_target_group_arn    = aws_lb_target_group.target_group.arn
+}

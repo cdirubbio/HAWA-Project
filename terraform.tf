@@ -1,6 +1,6 @@
 terraform {
   cloud {
-    organization = var.HCP_Org
+    organization = "cdirubbs-demo-organization"
     workspaces {
       name = "HAWA-PROJECT"
     }
