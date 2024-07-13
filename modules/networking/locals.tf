@@ -10,7 +10,7 @@ locals {
     7 = "207"
     8 = "208"
   }
-    pub_cidr_index_fix = {
+  pub_cidr_index_fix = {
     0 = "100"
     1 = "101"
     2 = "102"

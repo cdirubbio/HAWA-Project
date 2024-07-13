@@ -12,3 +12,8 @@ variable "priv_subnet_count" {
   type = number
   description = "Number of private subnets to create"
 }
+
+variable "instance_id" {
+  type = string
+  description = "ID of instance to create AMI from"
+}

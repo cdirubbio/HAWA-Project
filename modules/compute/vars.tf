@@ -3,7 +3,7 @@ variable "user_data_path" {
   type        = string
 }
 
-variable "instance_security_groups" {
+variable "instance_security_groups_id" {
   description = "List of security groups to apply to instance(s)"
   type        = list(string)
 }
@@ -14,7 +14,7 @@ variable "lb_security_groups" {
 }
 
 variable "priv_subnet_ids" {
-  type        = list(string)
+  type        = set(string)
   description = "List of subnet IDs that Instances can be provisioned in."
 }
 
@@ -31,4 +31,8 @@ variable "vpc_id" {
 variable "priv_subnet_count" {
   type        = number
   description = "Number of private subnets"
+}
+variable "instance_id" {
+  type = string
+  description = "ID of instance to create an AMI from"
 }

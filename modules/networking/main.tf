@@ -21,9 +21,9 @@ resource "aws_subnet" "priv_subnet" {
 
 
 resource "aws_subnet" "pub_subnet" {
-  count      = 2
-  cidr_block = "172.31.${local.pub_cidr_index_fix[count.index]}.0/24"
-  vpc_id     = data.aws_vpc.vpc.id
+  count                = 2
+  cidr_block           = "172.31.${local.pub_cidr_index_fix[count.index]}.0/24"
+  vpc_id               = data.aws_vpc.vpc.id
   availability_zone_id = "use1-az${count.index + 1}"
 
   tags = {
