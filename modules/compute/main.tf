@@ -41,7 +41,7 @@ resource "aws_launch_template" "lt" {
   image_id      = aws_ami_from_instance.golden_ami.id
   key_name      = data.aws_key_pair.kp.key_name
   instance_type = "t2.micro"
-  
+
   vpc_security_group_ids = var.instance_security_groups_id
 
   user_data = base64encode(file(var.user_data_path))
